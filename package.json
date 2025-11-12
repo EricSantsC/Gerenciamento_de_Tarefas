@@ -1,0 +1,26 @@
+{
+  
+  "name": "sistema-de-tarefas-backend",
+  "version": "1.0.0",
+  "description": "Backend da aplicação Sistema de Tarefas",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Nenhum teste especificado\" && exit 0"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mysql"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

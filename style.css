@@ -1,0 +1,13 @@
+/* frontend/style.css */
+.priority-baixa {
+    border-left: 5px solid #28a745; /* Verde */
+}
+.priority-media {
+    border-left: 5px solid #ffc107; /* Amarelo */
+}
+.priority-alta {
+    border-left: 5px solid #dc3545; /* Vermelho */
+}
+.card-body h5 {
+    text-transform: capitalize;
+}
