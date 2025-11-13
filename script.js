@@ -1,5 +1,3 @@
-// frontend/script.js - Versão adaptada para localStorage
-
 // Variáveis globais
 const taskForm = document.getElementById('task-form');
 const taskList = document.getElementById('task-list');
@@ -30,16 +28,29 @@ const fetchTasks = () => {
     taskList.innerHTML = ''; // Limpa a lista antes de adicionar os novos itens
 
     tasks.forEach(task => {
+        // Correção: Garantir que a data de vencimento é formatada corretamente
+        const formattedDate = task.data_vencimento ? new Date(task.data_vencimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '';
+        
+        // Correção: Garantir que todos os argumentos de string para editTask estão entre aspas simples
+        const editTaskArgs = [
+            task.id, 
+            task.titulo.replace(/'/g, "\\'"), // Escapar aspas simples
+            (task.descricao || '').replace(/'/g, "\\'"), 
+            task.data_vencimento, 
+            task.prioridade, 
+            task.status
+        ].map(arg => `'${arg}'`).join(', ');
+
         const taskCard = `
             <div class="col-md-4 mb-3">
                 <div class="card priority-${task.prioridade}">
                     <div class="card-body">
                         <h5 class="card-title">${task.titulo}</h5>
                         <p class="card-text">${task.descricao || ''}</p>
-                        <p class="card-text"><small class="text-muted">Vencimento: ${new Date(task.data_vencimento).toLocaleDateString()}</small></p>
+                        <p class="card-text"><small class="text-muted">Vencimento: ${formattedDate}</small></p>
                         <p class="card-text"><small class="text-muted">Prioridade: ${task.prioridade}</small></p>
                         <p class="card-text"><small class="text-muted">Status: ${task.status}</small></p>
-                        <button class="btn btn-sm btn-warning" onclick="editTask(${task.id}, '${task.titulo}', '${task.descricao}', '${task.data_vencimento}', '${task.prioridade}', '${task.status}')">Editar</button>
+                        <button class="btn btn-sm btn-warning" onclick="editTask(${editTaskArgs})">Editar</button>
                         <button class="btn btn-sm btn-danger" onclick="deleteTask(${task.id})">Excluir</button>
                     </div>
                 </div>
@@ -69,7 +80,8 @@ taskForm.addEventListener('submit', (e) => {
         // Atualizar tarefa existente
         const index = tasks.findIndex(t => t.id == id);
         if (index !== -1) {
-            tasks[index] = { ...tasks[index], ...taskData };
+            // Preservar o ID original e atualizar os outros campos
+            tasks[index] = { id: parseInt(id), ...taskData };
         }
     } else {
         // Adicionar nova tarefa
@@ -117,5 +129,6 @@ const resetForm = () => {
 cancelEditBtn.addEventListener('click', resetForm);
 
 // Carrega as tarefas ao iniciar a página
-fetchTasks();
+document.addEventListener('DOMContentLoaded', fetchTasks); // Correção: Garantir que fetchTasks é chamado após o DOM estar pronto
+// fetchTasks(); // Removido para evitar chamada dupla se o utilizador já tiver esta linha no HTML
 Gerenciamento de Tarefas Website - Manus
